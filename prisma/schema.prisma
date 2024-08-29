@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id           String                   @id @default(uuid())
+  name         String
+  email        String? 
+  roleType     RoleType
+  clerkId      String
+  createdAt    DateTime                 @default(now())
+  // Relation to scholarship applications
+  applications ScholarshipApplication[]
+}
+
+enum RoleType {
+  STUDENT
+  HOD
+  PRINCIPAL
+  FINANCE_HEAD
+}
+
+model ScholarshipApplication {
+  id                    String   @id @default(uuid())
+  name                  String
+  rollNo                String
+  branch                String
+  aadharCard            String?
+  marksheet             String?
+  incomeCertificate     String?
+  approvedByHod         Boolean  @default(false)
+  approvedByFinanceHead Boolean  @default(false)
+  approvedByPrincipal   Boolean  @default(false)
+  feedback              String?
+  amountSanction        Int?
+  createdAt             DateTime @default(now())
+  // Foreign key to role (student)
+  studentId             String?
+  student               Role?     @relation(fields: [studentId], references: [id])
+}
