@@ -73,7 +73,7 @@ export const uploadDocuments = async (req, res) => {
     //   });
     // } else {
       // Create a new application
-      application = await prisma.scholarshipApplication.create({
+      const application = await prisma.scholarshipApplication.create({
         data: {
           studentId,
           name,
@@ -102,9 +102,7 @@ export const getAllScholarshipApplications = async (req, res) => {
     try {
       // Fetch all scholarship applications
       const applications = await prisma.scholarshipApplication.findMany({
-        include: {
-          student: true, // Include related student (Role) information
-        },
+        
       });
   
       // Return the applications in response
@@ -122,7 +120,7 @@ export const getAllScholarshipApplications = async (req, res) => {
   
       // Fetch the scholarship application by studentId
       const application = await prisma.scholarshipApplication.findFirst({
-        where: { student: { clerkId: studentId } }, // Use clerkId if studentId is not unique
+        where: { studentId:  studentId  }, // Use clerkId if studentId is not unique
         select: {
           approvedByHod: true,
           approvedByPrincipal: true,
