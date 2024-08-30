@@ -16,7 +16,7 @@ router.post('/student/upload-documents', upload.fields([
 router.get('/admin/get-applications',getAllScholarshipApplications)
 router.get('/student/tracking-status/:studentId', getTrackingStatus);
 
-router.patch("/scholarship-application/:applicationId/approve/principal", approveByPrincipal);
+router.patch("/scholarship-application/:applicationId/approve/principalY", approveByPrincipal);
 router.patch("/scholarship-application/:applicationId/approve/finance-head", approveByFinanceHead);
 router.patch("/scholarship-application/:applicationId/approve/hod", approveByHodAndFeedback);
 
