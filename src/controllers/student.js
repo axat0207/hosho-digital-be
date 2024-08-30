@@ -141,3 +141,48 @@ export const getAllScholarshipApplications = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
   };
+
+  export const getPendingApplications = async (req, res) => {
+    try {
+      const applications = await prisma.scholarshipApplication.findMany({
+        where: {
+          status: 'pending',
+        },
+      });
+  
+      res.status(200).json(applications);
+    } catch (error) {
+      console.error('Error fetching pending applications:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  export const getAcceptedApplications = async (req, res) => {
+    try {
+      const applications = await prisma.scholarshipApplication.findMany({
+        where: {
+          status: 'accepted',
+        },
+      });
+  
+      res.status(200).json(applications);
+    } catch (error) {
+      console.error('Error fetching accepted applications:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  export const getRejectedApplications = async (req, res) => {
+    try {
+      const applications = await prisma.scholarshipApplication.findMany({
+        where: {
+          status: 'rejected',
+        },
+      });
+  
+      res.status(200).json(applications);
+    } catch (error) {
+      console.error('Error fetching rejected applications:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };

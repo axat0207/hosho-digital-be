@@ -1,25 +1,63 @@
 // routes/applicationRoutes.js
-import express from 'express';
-import { upload } from '../middleware/multer.js';
-import { getAllScholarshipApplications, getTrackingStatus, uploadDocuments } from '../controllers/student.js';
-import { approveByFinanceHead, approveByHodAndFeedback, approveByPrincipal } from '../controllers/admin.js';
+import express from "express";
+import { upload } from "../middleware/multer.js";
+import {
+  getAcceptedApplications,
+  getAllScholarshipApplications,
+  getPendingApplications,
+  getRejectedApplications,
+  getTrackingStatus,
+  uploadDocuments,
+} from "../controllers/student.js";
+import {
+  approveByFinanceHead,
+  approveByHodAndFeedback,
+  approveByPrincipal,
+  getAdminNotifications,
+  getUserNotifications,
+  postNotification,
+} from "../controllers/admin.js";
 
 const router = express.Router();
 
-// Route to handle document uploads
-router.post('/student/upload-documents', upload.fields([
-  { name: 'aadharCard', maxCount: 1 },
-  { name: 'marksheet', maxCount: 1 },
-  { name: 'incomeCertificate', maxCount: 1 }
-]), uploadDocuments);
+//! create application
+router.post(
+  "/student/upload-documents",
+  upload.fields([
+    { name: "aadharCard", maxCount: 1 },
+    { name: "marksheet", maxCount: 1 },
+    { name: "incomeCertificate", maxCount: 1 },
+  ]),
+  uploadDocuments
+);
 
-router.get('/admin/get-applications',getAllScholarshipApplications)
-router.get('/student/tracking-status/:studentId', getTrackingStatus);
+//!Student
+router.get("/admin/get-applications", getAllScholarshipApplications);
+router.get("/student/tracking-status/:studentId", getTrackingStatus);
 
-router.patch("/scholarship-application/:applicationId/approve/principalY", approveByPrincipal);
-router.patch("/scholarship-application/:applicationId/approve/finance-head", approveByFinanceHead);
-router.patch("/scholarship-application/:applicationId/approve/hod", approveByHodAndFeedback);
+//!Approve Application
+router.patch(
+  "/scholarship-application/:applicationId/approve/principal",
+  approveByPrincipal
+);
+router.patch(
+  "/scholarship-application/:applicationId/approve/finance-head",
+  approveByFinanceHead
+);
+router.patch(
+  "/scholarship-application/:applicationId/approve/hod",
+  approveByHodAndFeedback
+);
 
+//!Notifications
 
+router.post("/notifications", postNotification);
+router.get("/notifications/admin", getAdminNotifications);
+router.get("/notifications/user", getUserNotifications);
+
+//!all application with status
+router.get("/scholarships/pending", getPendingApplications);
+router.get("/scholarships/accepted", getAcceptedApplications);
+router.get("/scholarships/rejected", getRejectedApplications);
 
 export default router;
