@@ -14,21 +14,20 @@ export const approveByPrincipal = async (req, res) => {
       data: {
         approvedByPrincipal: approve, // Set true or false based on the approve boolean
         principalFeedback: principalFeedback || null, // Add principal feedback
-        status: approve ? "pending" : 'rejected', // Set status to 'rejected' if not approved
+        status: approve ? "pending" : "rejected", // Set status to 'rejected' if not approved
       },
     });
 
     const message = approve
       ? "Application approved by Principal"
       : "Application rejected by Principal";
-    
+
     res.status(200).json({ message, application });
   } catch (error) {
     console.error("Error in approveByPrincipal:", error);
     return res.status(500).json({ error: error.message });
   }
 };
-
 
 export const approveByFinanceHead = async (req, res) => {
   try {
@@ -41,21 +40,20 @@ export const approveByFinanceHead = async (req, res) => {
       data: {
         approvedByFinanceHead: approve, // Set true or false based on the approve boolean
         amountSanction: approve ? amount || null : null, // Set amount if approved
-        status: approve ? "accepted" : 'rejected', // Set status to 'rejected' if not approved
+        status: approve ? "accepted" : "rejected", // Set status to 'rejected' if not approved
       },
     });
 
     const message = approve
       ? "Application approved by Finance Head"
       : "Application rejected by Finance Head";
-    
+
     res.status(200).json({ message, application });
   } catch (error) {
     console.error("Error in approveByFinanceHead:", error);
     return res.status(500).json({ error: error.message });
   }
 };
-
 
 export const approveByHodAndFeedback = async (req, res) => {
   try {
@@ -68,21 +66,20 @@ export const approveByHodAndFeedback = async (req, res) => {
       data: {
         approvedByHod: approve, // Set true or false based on the approve boolean
         hodFeedback: feedback || null, // Set feedback or null if not provided
-        status: approve ? "pending" : 'rejected', // Set status to 'rejected' if not approved
+        status: approve ? "pending" : "rejected", // Set status to 'rejected' if not approved
       },
     });
 
     const message = approve
       ? "Application approved by HOD and feedback updated"
       : "Application rejected by HOD";
-    
+
     res.status(200).json({ message, application });
   } catch (error) {
     console.error("Error in approveByHodAndFeedback:", error);
     return res.status(500).json({ error: error.message });
   }
 };
-
 
 export const postNotification = async (req, res) => {
   try {
@@ -140,3 +137,49 @@ export const getUserNotifications = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getHodFeedback = async (req, res) => {
+  try {
+    const { applicationId } = req.params;
+
+    // Fetch the application based on the applicationId
+    const application = await prisma.scholarshipApplication.findUnique({
+      where: { id: applicationId },
+      select: {
+        hodFeedback: true, // Only select HOD feedback
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    res.status(200).json({ hodFeedback: application.hodFeedback });
+  } catch (error) {
+    console.error("Error in getHodFeedback:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+export const getPrincipalFeedback = async (req, res) => {
+  try {
+    const { applicationId } = req.params;
+
+    // Fetch the application based on the applicationId
+    const application = await prisma.scholarshipApplication.findUnique({
+      where: { id: applicationId },
+      select: {
+        principalFeedback: true, // Only select Principal feedback
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    res.status(200).json({ principalFeedback: application.principalFeedback });
+  } catch (error) {
+    console.error("Error in getPrincipalFeedback:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+

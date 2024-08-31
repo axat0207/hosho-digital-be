@@ -72,21 +72,20 @@ export const uploadDocuments = async (req, res) => {
     //     },
     //   });
     // } else {
-      // Create a new application
-      const application = await prisma.scholarshipApplication.create({
-        data: {
-          studentId,
-          name,
-          rollNo,
-          branch,
-          aadharCard: aadharCard ? aadharCard.secure_url : null,
-          marksheet: marksheet ? marksheet.secure_url : null,
-          incomeCertificate: incomeCertificate
-            ? incomeCertificate.secure_url
-            : null,
-        },
-      });
-    
+    // Create a new application
+    const application = await prisma.scholarshipApplication.create({
+      data: {
+        studentId,
+        name,
+        rollNo,
+        branch,
+        aadharCard: aadharCard ? aadharCard.secure_url : null,
+        marksheet: marksheet ? marksheet.secure_url : null,
+        incomeCertificate: incomeCertificate
+          ? incomeCertificate.secure_url
+          : null,
+      },
+    });
 
     res
       .status(200)
@@ -97,92 +96,90 @@ export const uploadDocuments = async (req, res) => {
   }
 };
 
-
 export const getAllScholarshipApplications = async (req, res) => {
-    try {
-      // Fetch all scholarship applications
-      const applications = await prisma.scholarshipApplication.findMany({
-        
-      });
-  
-      // Return the applications in response
-      res.status(200).json(applications);
-    } catch (error) {
-      console.error("Error in getAllScholarshipApplications:", error);
-      return res.status(500).json({ error: error.message });
-    }
-  };
+  try {
+    // Fetch all scholarship applications
+    const applications = await prisma.scholarshipApplication.findMany({});
 
+    // Return the applications in response
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error("Error in getAllScholarshipApplications:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
 
-  export const getTrackingStatus = async (req, res) => {
-    try {
-      const { studentId } = req.params;
-  
-      // Fetch the scholarship application by studentId
-      const application = await prisma.scholarshipApplication.findFirst({
-        where: { studentId:  studentId  }, // Use clerkId if studentId is not unique
-        select: {
-          approvedByHod: true,
-          approvedByPrincipal: true,
-          approvedByFinanceHead: true,
-          amountSanction: true,
-        },
-      });
-  
-      // If application not found, return an error
-      if (!application) {
-        return res.status(404).json({ error: "Application not found for the given student ID" });
-      }
-  
-      // Return the tracking status in response
-      res.status(200).json({ trackingStatus: application });
-    } catch (error) {
-      console.error("Error in getTrackingStatus:", error);
-      return res.status(500).json({ error: error.message });
-    }
-  };
+export const getTrackingStatus = async (req, res) => {
+  try {
+    const { studentId } = req.params;
 
-  export const getPendingApplications = async (req, res) => {
-    try {
-      const applications = await prisma.scholarshipApplication.findMany({
-        where: {
-          status: 'pending',
-        },
-      });
-  
-      res.status(200).json(applications);
-    } catch (error) {
-      console.error('Error fetching pending applications:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
+    // Fetch the scholarship application by studentId
+    const application = await prisma.scholarshipApplication.findFirst({
+      where: { id : studentId }, // Use clerkId if studentId is not unique
+      select: {
+        approvedByHod: true,
+        approvedByPrincipal: true,
+        approvedByFinanceHead: true,
+        amountSanction: true,
+      },
+    });
 
-  export const getAcceptedApplications = async (req, res) => {
-    try {
-      const applications = await prisma.scholarshipApplication.findMany({
-        where: {
-          status: 'accepted',
-        },
-      });
-  
-      res.status(200).json(applications);
-    } catch (error) {
-      console.error('Error fetching accepted applications:', error);
-      res.status(500).json({ error: 'Internal server error' });
+    // If application not found, return an error
+    if (!application) {
+      return res
+        .status(404)
+        .json({ error: "Application not found for the given student ID" });
     }
-  };
 
-  export const getRejectedApplications = async (req, res) => {
-    try {
-      const applications = await prisma.scholarshipApplication.findMany({
-        where: {
-          status: 'rejected',
-        },
-      });
-  
-      res.status(200).json(applications);
-    } catch (error) {
-      console.error('Error fetching rejected applications:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
+    // Return the tracking status in response
+    res.status(200).json({ trackingStatus: application });
+  } catch (error) {
+    console.error("Error in getTrackingStatus:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getPendingApplications = async (req, res) => {
+  try {
+    const applications = await prisma.scholarshipApplication.findMany({
+      where: {
+        status: "pending",
+      },
+    });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error("Error fetching pending applications:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getAcceptedApplications = async (req, res) => {
+  try {
+    const applications = await prisma.scholarshipApplication.findMany({
+      where: {
+        status: "accepted",
+      },
+    });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error("Error fetching accepted applications:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getRejectedApplications = async (req, res) => {
+  try {
+    const applications = await prisma.scholarshipApplication.findMany({
+      where: {
+        status: "rejected",
+      },
+    });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error("Error fetching rejected applications:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

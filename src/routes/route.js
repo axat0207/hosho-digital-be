@@ -14,6 +14,8 @@ import {
   approveByHodAndFeedback,
   approveByPrincipal,
   getAdminNotifications,
+  getHodFeedback,
+  getPrincipalFeedback,
   getUserNotifications,
   postNotification,
 } from "../controllers/admin.js";
@@ -54,6 +56,8 @@ router.patch(
 router.post("/notifications", postNotification);
 router.get("/notifications/admin", getAdminNotifications);
 router.get("/notifications/user", getUserNotifications);
+router.get("/notifications/principal/:applicationId", getPrincipalFeedback);
+router.get("/notifications/hod/:applicationId", getHodFeedback);
 
 //!all application with status
 router.get("/scholarships/pending", getPendingApplications);
