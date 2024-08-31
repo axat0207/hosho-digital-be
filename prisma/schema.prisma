@@ -23,7 +23,7 @@ model ScholarshipApplication {
   amountSanction        Int?
   status                String   @default("pending")
   createdAt             DateTime @default(now())
-  studentId             String
+  studentId             String   @unique
 }
 
 model Notification {

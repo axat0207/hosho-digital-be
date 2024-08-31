@@ -14,6 +14,7 @@ import {
   approveByHodAndFeedback,
   approveByPrincipal,
   getAdminNotifications,
+  getAmountDetails,
   getHodFeedback,
   getPrincipalFeedback,
   getUserNotifications,
@@ -63,5 +64,7 @@ router.get("/notifications/hod/:applicationId", getHodFeedback);
 router.get("/scholarships/pending", getPendingApplications);
 router.get("/scholarships/accepted", getAcceptedApplications);
 router.get("/scholarships/rejected", getRejectedApplications);
+
+router.get('/getAmountDetails', getAmountDetails)
 
 export default router;

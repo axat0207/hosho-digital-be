@@ -50,29 +50,7 @@ export const uploadDocuments = async (req, res) => {
     console.log({ aadharCard });
     console.log({ marksheet });
     console.log({ incomeCertificate });
-    // Check if a scholarship application for the studentId already exists
-    // const existingApplication = await prisma.scholarshipApplication.findUnique({
-    //   where: { studentId },
-    // });
-
-    // let application;
-    // if (existingApplication) {
-    //   // Update the existing application
-    //   application = await prisma.scholarshipApplication.update({
-    //     where: { id: existingApplication.id },
-    //     data: {
-    //       name,
-    //       rollNo,
-    //       branch,
-    //       aadharCard: aadharCard ? aadharCard.secure_url : null,
-    //       marksheet: marksheet ? marksheet.secure_url : null,
-    //       incomeCertificate: incomeCertificate
-    //         ? incomeCertificate.secure_url
-    //         : null,
-    //     },
-    //   });
-    // } else {
-    // Create a new application
+   
     const application = await prisma.scholarshipApplication.create({
       data: {
         studentId,

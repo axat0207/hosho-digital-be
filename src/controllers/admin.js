@@ -183,3 +183,36 @@ export const getPrincipalFeedback = async (req, res) => {
   }
 };
 
+
+const TOTAL_AMOUNT = 10000000; // Total amount of 10,000,000
+
+export const getAmountDetails = async (req, res) => {
+  try {
+    // Sum up all the sanctioned amounts from the database
+    const totalSanctioned = await prisma.scholarshipApplication.aggregate({
+      _sum: {
+        amountSanction: true,
+      },
+    });
+
+    // Get the sum value or set it to 0 if null
+    const totalAmountSanctioned = totalSanctioned._sum.amountSanction || 0;
+
+    // Calculate the remaining amount
+    const remainingAmount = TOTAL_AMOUNT - totalAmountSanctioned;
+
+    // Subtracting total sanctioned amount from the total amount available
+    const difference = TOTAL_AMOUNT - totalAmountSanctioned;
+
+    // Respond with the data
+    res.json({
+      totalAmount: TOTAL_AMOUNT,
+      totalAmountSanctioned,
+      remainingAmount,
+      difference,
+    });
+  } catch (error) {
+    console.error("Failed to fetch amount details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
